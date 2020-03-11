@@ -2,11 +2,11 @@
 const Tours = require('../models/tour');
 
 const APIFeatures = require('../utils/apiFeatures');
+const catchAsync = require('../utils/catchAsync');
 
 
-const getAllTours = async (req, res) => {
 
-    try{
+const getAllTours = catchAsync(async (req, res, next) => {
 
         // Execute query
         const features = new APIFeatures(Tours.find(), req.query)
@@ -24,20 +24,11 @@ const getAllTours = async (req, res) => {
             }
         })
 
-    }catch(err){
-        // console.log(err);
-        res.status(400).json({
-            status: 'fail',
-            message: err
-        })
-    }
-
-}
+});
 
 
-const postNewTour = async (req, res) => {
+const postNewTour = catchAsync(async (req, res, next) => {
 
-    try{
 
         const newTour = new Tours(req.body);
         await newTour.save();
@@ -48,24 +39,12 @@ const postNewTour = async (req, res) => {
                 tour: newTour
             }
         });
-
-    }catch(err){
-        console.log(err);
-        res.status(400).json({
-            status: 'fail',
-            error: err
-        })
-    }
-
     
-    
-}
+})
 
-const getSpecificTour = async (req, res) => {
+const getSpecificTour = catchAsync(async (req, res, next) => {
 
     const id = req.params.id;
-
-    try {
 
         const tour = await Tours.findById(id);
         if (!tour){
@@ -81,21 +60,13 @@ const getSpecificTour = async (req, res) => {
             }
         })
 
-    }catch (err){
-        console.log(err);
-        res.status(400).json({
-            status: 'fail',
-            error: err
-        })
-    }
-}
+})
 
 
-const updateSpecificTour = async (req, res) => {
+const updateSpecificTour = catchAsync(async (req, res, next) => {
 
     const id = req.params.id;
 
-    try{
         const updatedTour = await Tours.findByIdAndUpdate(id, req.body, {
             new: true,
             runValidators: true
@@ -115,22 +86,12 @@ const updateSpecificTour = async (req, res) => {
             }
         })
 
-    }catch(err){
-        console.log(err);
-        res.status(400).json({
-            status: 'fail',
-            error: err
-        })
-    }
-
-}
+})
 
 
-const deleteTour = async (req, res) => {
+const deleteTour = catchAsync(async (req, res, next) => {
 
     const id = req.params.id;
-
-    try{
 
         await Tours.findByIdAndDelete(id);
         res.status(200).json({
@@ -138,15 +99,7 @@ const deleteTour = async (req, res) => {
             message: 'item deleted'
         })
         
-
-    }catch(err){
-        console.log(err);
-        res.status(400).json({
-            status: 'fail',
-            error: err
-        })
-    }
-}
+})
 
 
 
