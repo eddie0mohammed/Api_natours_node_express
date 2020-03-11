@@ -1,13 +1,21 @@
 
 const Tours = require('../models/tour');
 
-
+const APIFeatures = require('../utils/apiFeatures');
 
 
 const getAllTours = async (req, res) => {
 
     try{
-        const tours = await Tours.find();
+
+        // Execute query
+        const features = new APIFeatures(Tours.find(), req.query)
+            .filter()
+            .sort()
+            .limitFields()
+            .paginate();
+
+        const tours = await features.query;
         res.status(200).json({
             status: 'success',
             results: tours.length,
@@ -17,7 +25,7 @@ const getAllTours = async (req, res) => {
         })
 
     }catch(err){
-        console.log(err);
+        // console.log(err);
         res.status(400).json({
             status: 'fail',
             message: err
