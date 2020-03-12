@@ -3,6 +3,7 @@ const Tours = require('../models/tour');
 
 const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
+const appError = require('../utils/appError');
 
 
 
@@ -48,10 +49,7 @@ const getSpecificTour = catchAsync(async (req, res, next) => {
 
         const tour = await Tours.findById(id);
         if (!tour){
-            return res.status(400).json({
-                status:'fail',
-                message: 'No tour found'
-            })
+            return next(new appError('No tour found with that ID', 404));
         }
         res.status(200).json({
             status: 'success',
@@ -73,10 +71,7 @@ const updateSpecificTour = catchAsync(async (req, res, next) => {
         });
 
         if (!updatedTour){
-            return res.status(400).json({
-                status: 'fail',
-                message: 'Couldn\'t find a tour'
-            })
+             return next(new appError('No tour found with that ID', 404));
         }
 
         res.status(200).json({
@@ -93,7 +88,11 @@ const deleteTour = catchAsync(async (req, res, next) => {
 
     const id = req.params.id;
 
-        await Tours.findByIdAndDelete(id);
+        const tour = await Tours.findByIdAndDelete(id);
+        if (!tour){
+            return next(new appError('No tour found with that ID', 404));
+        }
+        
         res.status(200).json({
             status: 'success',
             message: 'item deleted'
