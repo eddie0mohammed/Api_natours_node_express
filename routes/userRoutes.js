@@ -9,13 +9,13 @@ const router = express.Router();
 
 router.get('/', userController.getAllUsers);
 
-router.post('/', userController.createUser);
+// router.post('/', userController.createUser);
 
-router.get('/:id', userController.getSpecificUser);
+// router.get('/:id', userController.getSpecificUser);
 
-router.patch(':id', userController.updateUser);
+// router.patch(':id', userController.updateUser);
 
-router.delete('/:id', userController.deleteUser);
+// router.delete('/:id', userController.deleteUser);
 
 
 //auth
@@ -28,5 +28,7 @@ router.patch('/resetPassword/:token', authController.resetPassword);
 router.patch('/updateMyPassword', authController.protect, authController.updatePassword);
 
 router.patch('/updateMe', authController.protect, userController.updateMe);
+
+router.delete('/deleteMe', authController.protect, userController.deleteMe);
 
 module.exports = router;

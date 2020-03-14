@@ -19,22 +19,6 @@ const getAllUsers = catchAsync(async (req, res) => {
 
 })
 
-const createUser = (req, res) => {
-
-
-}
-
-const getSpecificUser = (req, res) => {
-
-}
-
-const updateUser = (req, res) => {
-
-}
-
-const deleteUser = (req, res) => {
-
-}
 
 
 const filterObj = (obj, ...allowedFields) => {
@@ -74,13 +58,26 @@ const updateMe = catchAsync(async (req, res, next) => {
 
 
 
+//delete user => does not delete, makes user inactive instead, in case user wants to reactivate account in future
+const deleteMe = catchAsync(async (req, res, next) => {
+
+    await User.findByIdAndUpdate(req.user.id, {
+        active: false
+    });
+
+    res.status(204).json({
+        status: 'success',
+        data: null
+    });
+});
+
+
+
+
 
 
 module.exports = {
     getAllUsers: getAllUsers,
-    createUser: createUser,
-    getSpecificUser: getSpecificUser,
-    updateUser: updateUser,
-    deleteUser: deleteUser,
-    updateMe: updateMe
+    updateMe: updateMe,
+    deleteMe: deleteMe
 }
